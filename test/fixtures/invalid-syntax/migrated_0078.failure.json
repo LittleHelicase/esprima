@@ -2,5 +2,6 @@
     "index": 13,
     "lineNumber": 1,
     "column": 14,
+    "length": 1,
     "message": "Error: Line 1: Unexpected token {"
 }
