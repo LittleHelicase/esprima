@@ -50,6 +50,7 @@ function errorToObject(e) {
         index: e.index,
         lineNumber: e.lineNumber,
         column: e.column,
+        length: e.length,
         message: msg
     };
 }

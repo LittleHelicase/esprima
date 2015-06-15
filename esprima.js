@@ -2302,11 +2302,12 @@
         extra.errors.push(error);
     }
 
-    function createError(line, pos, description) {
+    function createError(line, pos, tokenLength, description) {
         var error = new Error('Line ' + line + ': ' + description);
         error.index = pos;
         error.lineNumber = line;
         error.column = pos - (scanning ? lineStart : lastLineStart) + 1;
+        error.length = tokenLength;
         error.description = description;
         return error;
     }
@@ -2324,7 +2325,7 @@
             }
         );
 
-        throw createError(lastLineNumber, lastIndex, msg);
+        throw createError(lastLineNumber, lastIndex, 1, msg);
     }
 
     function tolerateError(messageFormat) {
@@ -2339,7 +2340,7 @@
             }
         );
 
-        error = createError(lineNumber, lastIndex, msg);
+        error = createError(lineNumber, lastIndex, 1, msg);
         if (extra.errors) {
             recordError(error);
         } else {
@@ -2378,8 +2379,8 @@
         msg = msg.replace('%0', value);
 
         return (token && typeof token.lineNumber === 'number') ?
-            createError(token.lineNumber, token.start, msg) :
-            createError(scanning ? lineNumber : lastLineNumber, scanning ? index : lastIndex, msg);
+            createError(token.lineNumber, token.start, token.end - token.start, msg) :
+            createError(scanning ? lineNumber : lastLineNumber, scanning ? index : lastIndex, 1, msg);
     }
 
     function throwUnexpectedToken(token, message) {
